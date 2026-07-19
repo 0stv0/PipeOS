@@ -51,8 +51,12 @@ for cmd in "${CMDS[@]}"; do
 done
 sudo mkdir -p "$MNT_DIR/usr/bin";
 sudo ln -sf /bin/busybox "$MNT_DIR/usr/bin/env";
+
+# CLI Commands
 sudo cp "$BUILD_DIR/pipeos" "$MNT_DIR/bin/pipeos";
 sudo chmod +x "$MNT_DIR/bin/pipeos";
+sudo cp "$BUILD_DIR/db" "$MNT_DIR/bin/db";
+sudo chmod +x "$MNT_DIR/bin/db";
 
 echo "[5] Creating .bashrc";
 sudo mkdir -p "$MNT_DIR/root";
@@ -62,6 +66,7 @@ sudo cp /tmp/pipeos-bashrc "$MNT_DIR/root/.bashrc";
 echo "[6] Creating essential directories";
 sudo mkdir -p "$MNT_DIR/dev" "$MNT_DIR/proc" "$MNT_DIR/sys" "$MNT_DIR/root" "$MNT_DIR/var/pipeos";
 sudo touch "$MNT_DIR/var/pipeos/.pipelines";
+sudo touch "$MNT_DIR/var/pipeos/.dbs";
 
 echo "[7] Installing NodeJS";
 sudo mkdir -p "$MNT_DIR/usr/local/node";

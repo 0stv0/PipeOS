@@ -24,7 +24,7 @@ int main(void) {
 	}
 
 	char *argv[] = { "/bin/bash", NULL };
-	char *envp[] = { "PATH=/bin:/usr/bin", "HOME=/root", "TERM=linux", "PS1=sh> ", NULL };
+	char *envp[] = { "PATH=/bin:/usr/bin", "HOME=/root", "TERM=linux", "PS1=[\\w] sh> ", NULL };
 
 	execve("/bin/bash", argv, envp);
 

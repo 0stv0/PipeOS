@@ -22,6 +22,7 @@ CMDS=(
 	"sh"
 	"vi"
 	"clear"
+	"env"
 );
 
 echo "[1] Creating disk image";
@@ -48,6 +49,10 @@ sudo cp /bin/busybox "$MNT_DIR/bin/busybox";
 for cmd in "${CMDS[@]}"; do
     sudo ln -sf busybox "$MNT_DIR/bin/$cmd";
 done
+sudo mkdir -p "$MNT_DIR/usr/bin";
+sudo ln -sf /bin/busybox "$MNT_DIR/usr/bin/env";
+sudo cp "$BUILD_DIR/pipeos" "$MNT_DIR/bin/pipeos";
+sudo chmod +x "$MNT_DIR/bin/pipeos";
 
 echo "[5] Creating .bashrc";
 sudo mkdir -p "$MNT_DIR/root";
@@ -55,7 +60,20 @@ echo "enable -n help" > /tmp/pipeos-bashrc;
 sudo cp /tmp/pipeos-bashrc "$MNT_DIR/root/.bashrc";
 
 echo "[6] Creating essential directories";
-sudo mkdir -p "$MNT_DIR/dev" "$MNT_DIR/proc" "$MNT_DIR/sys" "$MNT_DIR/root";
+sudo mkdir -p "$MNT_DIR/dev" "$MNT_DIR/proc" "$MNT_DIR/sys" "$MNT_DIR/root" "$MNT_DIR/var/pipeos";
+sudo touch "$MNT_DIR/var/pipeos/.pipelines";
+
+echo "[7] Installing NodeJS";
+sudo mkdir -p "$MNT_DIR/usr/local/node";
+sudo cp -r "$BUILD_DIR/node/"* "$MNT_DIR/usr/local/node";
+sudo ln -sf /usr/local/node/bin/node "$MNT_DIR/bin/node";
+sudo ln -sf /usr/local/node/bin/npm "$MNT_DIR/bin/npm";
+sudo ln -sf /usr/local/node/bin/npx "$MNT_DIR/bin/npx";
+sudo mkdir -p "$MNT_DIR/lib/x86_64-linux-gnu" "$MNT_DIR/lib64";
+for lib in libdl.so.2 libstdc++.so.6 libm.so.6 libgcc_s.so.1 libpthread.so.0 libc.so.6; do
+	sudo cp "/usr/lib/x86_64-linux-gnu/$lib" "$MNT_DIR/lib/x86_64-linux-gnu/$lib";
+done
+sudo cp /lib64/ld-linux-x86-64.so.2 "$MNT_DIR/lib64/ld-linux-x86-64.so.2";
 
 echo "[7] Unmounting";
 sudo umount "$MNT_DIR";

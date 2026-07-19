@@ -9,6 +9,7 @@ OUTPUT="$BUILD_DIR/initramfs.cpio";
 
 MODULES=(
 	"init/init.c:init"
+	"cli/pipeos.c:pipeos"
 );
 
 mkdir -p "$BUILD_DIR";

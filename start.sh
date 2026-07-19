@@ -1,6 +1,7 @@
 #!/bin/bash
 set -e
 
+./scripts/fetch-node.sh;
 ./scripts/build-modules.sh;
 ./scripts/build-rootfs.sh;
 
